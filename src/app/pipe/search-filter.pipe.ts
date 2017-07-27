@@ -10,7 +10,7 @@ export class SearchFilterPipe implements PipeTransform {
       return value;
     }
     return value.filter(item => {
-      let fieldValue = item[filterField];
+      const fieldValue = item[filterField];
       return fieldValue.indexOf(keyword) >= 0;
     });
   }

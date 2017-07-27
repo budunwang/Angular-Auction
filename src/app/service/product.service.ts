@@ -3,12 +3,12 @@ import {Injectable} from '@angular/core';
 @Injectable()
 export class ProductService {
   private products: Array<Product> = [
-    new Product(1, 'first', 121, 3.5, 'Hello', ['12', '2']),
-    new Product(2, 'second', 131, 4.5, 'Hello', ['12', '2']),
-    new Product(3, 'third', 11, 2.5, 'Hello', ['12', '2']),
-    new Product(4, 'fourth', 21, 3, 'Hello', ['12', '2']),
-    new Product(5, 'fifth', 221, 3, 'Hello', ['12', '2']),
-    new Product(6, 'sixth', 181, 4.5, 'Hello', ['12', '2']),
+    new Product(1, 'first', 121, 3.5, 'Hello', ['a']),
+    new Product(2, 'second', 131, 4.5, 'Hello', ['a', 'c']),
+    new Product(3, 'third', 11, 2.5, 'Hello', ['c']),
+    new Product(4, 'fourth', 21, 3, 'Hello', ['b', 'c']),
+    new Product(5, 'fifth', 221, 3, 'Hello', ['a', 'b']),
+    new Product(6, 'sixth', 181, 4.5, 'Hello', ['a']),
   ];
 
   private comments: Array<Comment> = [
@@ -33,6 +33,10 @@ export class ProductService {
 
   getCommentsByProductId(id: number): Array<Comment> {
     return this.comments.filter((comment) => comment.productId === id);
+  }
+
+  getAllCategories(): Array<string> {
+    return ['a', 'b', 'c'];
   }
 }
 

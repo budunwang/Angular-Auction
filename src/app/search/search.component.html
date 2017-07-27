@@ -1,15 +1,24 @@
-<form name="searchForm" role="form">
-  <div class="form-group">
+<form [formGroup]="formModel" role="form" (submit)="onSubmit()" novalidate>
+  <div class="form-group" [class.has-error]="formModel.hasError('minlength', 'title')">
     <label for="productTitle">Inventory Name</label>
-    <input type="text" id="productTitle" placeholder="Inventory Name" class="form-control">
+    <input formControlName="title" type="text" id="productTitle" placeholder="Inventory Name" class="form-control">
+    <span class="help-block" [class.hidden]="!formModel.hasError('minlength', 'title')">
+        The length of word must be longer than 3!
+    </span>
   </div>
-  <div class="form-group">
+  <div class="form-group" [class.has-error]="formModel.hasError('positiveNumber', 'price')">
     <label for="productPrice">Inventory Price</label>
-    <input type="number" id="productPrice" placeholder="Inventory Price" class="form-control">
+    <input formControlName="price" type="number" id="productPrice" placeholder="Inventory Price" class="form-control">
+    <span class="help-block" [class.hidden]="!formModel.hasError('positiveNumber', 'price')">
+        The price is negative!
+    </span>
   </div>
   <div class="form-group">
     <label for="productCategory">Inventory Category</label>
-    <select id="productCategory" class="form-control"></select>
+    <select formControlName="category" id="productCategory" class="form-control">
+      <option value="-1">All</option>
+      <option *ngFor="let category of categories" [value]="category">{{category}}</option>
+    </select>
   </div>
   <div class="form-group">
     <button type="submit" class="btn btn-block btn-primary">search</button>

@@ -8,16 +8,30 @@
   <div>
     <p class="pull-right">{{comments.length}}</p>
     <p>
-      <app-stars [rating]="product.rating"></app-stars>
+      <app-stars [rating]="product.rating" [readOnly]="true"></app-stars>
     </p>
   </div>
 </div>
 
 <div class="well">
+  <div>
+    <button class="btn-success" (click)="commentHidden()">Comment</button>
+  </div>
+  <div [hidden]="isCommentHide">
+    <div>
+      <app-stars [rating]="newRating" [readOnly]="false" (ratingClick)="ratingClickHandle($event)" ></app-stars>
+    </div>
+    <div>
+      <textarea [(ngModel)]="newComment"></textarea>
+    </div>
+    <div>
+      <button class="btn" (click)="addNewComment()">Send</button>
+    </div>
+  </div>
   <div class="row"  *ngFor="let comment of comments">
     <hr>
     <div class="col-md-12">
-      <app-stars [rating]="comment.rating"></app-stars>
+      <app-stars [rating]="comment.rating" [readOnly]="true"></app-stars>
       <span>{{comment.user}}</span>
       <span class="pull-right">{{comment.timestamp}}</span>
       <p></p>
