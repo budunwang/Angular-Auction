@@ -1,42 +1,59 @@
-import {Injectable} from '@angular/core';
+import {EventEmitter, Injectable} from '@angular/core';
+import {Http} from '@angular/http';
+import {Observable} from 'rxjs/Observable';
+import 'rxjs/Rx';
 
 @Injectable()
 export class ProductService {
-  private products: Array<Product> = [
-    new Product(1, 'first', 121, 3.5, 'Hello', ['a']),
-    new Product(2, 'second', 131, 4.5, 'Hello', ['a', 'c']),
-    new Product(3, 'third', 11, 2.5, 'Hello', ['c']),
-    new Product(4, 'fourth', 21, 3, 'Hello', ['b', 'c']),
-    new Product(5, 'fifth', 221, 3, 'Hello', ['a', 'b']),
-    new Product(6, 'sixth', 181, 4.5, 'Hello', ['a']),
-  ];
+  private products: Array<Product>;
 
-  private comments: Array<Comment> = [
-    new Comment(1, 1, '2017-07-20 23:33:22', 'Li', 3, 'Hao'),
-    new Comment(2, 1, '2017-07-20 23:33:23', 'Mi', 4, 'Hao de'),
-    new Comment(3, 1, '2017-07-20 23:33:24', 'Wi', 2, 'Hao ba'),
-    new Comment(4, 2, '2017-07-20 23:33:25', 'Ai', 5, 'Hao e'),
-    new Comment(5, 2, '2017-07-20 23:33:26', 'Yi', 2, 'Hao q'),
-    new Comment(6, 3, '2017-07-20 23:33:27', 'Ti', 1, 'Hao'),
-  ];
+  private comments: Array<Comment>;
 
-  constructor() {
+  public searchEvent: EventEmitter<ProductSearchParams> = new EventEmitter();
+
+  constructor(private http: Http) {
   }
 
-  getProducts(): Array<Product> {
-    return this.products;
+  getProducts(): Observable<Array<Product>> {
+    return this.http.get('/api/products')
+      .map(res => res.json());
   }
 
-  getProductById(id: number): Product {
-    return this.products.find((product) => product.id === id);
+  getProductById(id: number): Observable<Product> {
+    return this.http.get('/api/products/' + id)
+      .map(res => res.json());
   }
 
-  getCommentsByProductId(id: number): Array<Comment> {
-    return this.comments.filter((comment) => comment.productId === id);
+  getCommentsByProductId(id: number): Observable<Array<Comment>> {
+    return this.http.get('/api/products/' + id + '/comments')
+      .map(res => res.json());
   }
 
   getAllCategories(): Array<string> {
     return ['a', 'b', 'c'];
+  }
+
+  search(params: ProductSearchParams): Observable<Array<Product>> {
+    return this.http.get('/api/products?' + this.encodeParams(params).toString())
+      .map(res => res.json());
+  }
+
+  encodeParams(params: ProductSearchParams) {
+    return Object.keys(params)
+      .filter(key => {
+        return params[key];
+      })
+      .reduce((sum: URLSearchParams, key: string) => {
+        sum.append(key, params[key]);
+        return sum;
+      }, new URLSearchParams());
+  }
+}
+
+export class ProductSearchParams {
+  constructor(public title: string,
+              public price: number,
+              public category: string) {
   }
 }
 

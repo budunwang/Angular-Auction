@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {Product, Comment, ProductService} from '../service/product.service';
+import {Observable} from "rxjs";
 
 @Component({
   selector: 'app-product-detail',
@@ -23,8 +24,12 @@ export class ProductDetailComponent implements OnInit {
 
   ngOnInit() {
     const productId = this.route.snapshot.params['id'];
-    this.product = this.productService.getProductById(Number(productId));
-    this.comments = this.productService.getCommentsByProductId(this.product.id);
+    this.productService.getProductById(Number(productId))
+      .subscribe(product => this.product = product
+      );
+    this.productService.getCommentsByProductId(Number(productId))
+      .subscribe(comments => this.comments = comments
+      );
   }
 
   addNewComment() {
@@ -35,7 +40,7 @@ export class ProductDetailComponent implements OnInit {
     this.newComment = '';
     this.isCommentHide = true;
 
-    let sum = this.comments.reduce((sum, comment) => sum + comment.rating, 0);
+    const sum = this.comments.reduce((sum, comment) => sum + comment.rating, 0);
     this.product.rating = sum / this.comments.length;
   }
 
