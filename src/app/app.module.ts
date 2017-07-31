@@ -16,6 +16,7 @@ import {HomeComponent} from './home/home.component';
 import {PageNotFoundComponent} from './page-not-found/page-not-found.component';
 import {ProductService} from './service/product.service';
 import { SearchFilterPipe } from './pipe/search-filter.pipe';
+import {WebSocketService} from "./service/web-socket.service";
 
 const appRoutes: Routes = [
   // 主页重定向
@@ -47,7 +48,10 @@ const appRoutes: Routes = [
     ReactiveFormsModule,
     RouterModule.forRoot(appRoutes)
   ],
-  providers: [ProductService],
+  providers: [
+    ProductService,
+    WebSocketService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {
